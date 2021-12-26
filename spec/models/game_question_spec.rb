@@ -35,4 +35,16 @@ RSpec.describe GameQuestion, type: :model do
       expect(game_question.level).to eq(game_question.question.level)
     end
   end
+
+  # Проверяем метод correct_answer_key
+  context 'testing method correct_answer_key' do
+    it 'getting the key of the correct answer' do
+      # Метод correct_answer_key возвращает ключ правильного ответа 'a', 'b', 'c', 'd'
+      # Поскольку под буквой 'b' в тесте спрятан правильный ответ то и получить должны 'b'
+      expect(game_question.correct_answer_key).not_to eq('a')
+      expect(game_question.correct_answer_key).to eq('b')
+      expect(game_question.correct_answer_key).not_to eq('c')
+      expect(game_question.correct_answer_key).not_to eq('d')
+    end
+  end
 end
