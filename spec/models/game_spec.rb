@@ -121,9 +121,6 @@ RSpec.describe Game, type: :model do
     context 'testing questions' do
       it 'return current not answer question previous_level game' do
         # задаваемые вопросы созданные на фабрике известны
-
-        # Метод previous_level возвращает число, равное предыдущему уровню сложности.
-         # Обратите внимание, что этот метод возвращает -1 для новой игры.
         q = game_w_questions.current_game_question
         expect(game_w_questions.current_game_question.text).to eq('В каком году была космичесая одиссея 155?')
         # уровень на начало игры
