@@ -117,5 +117,25 @@ RSpec.describe Game, type: :model do
         expect(game_w_questions.status).to eq(:money)
       end
     end
+
+    context 'testing questions' do
+      it 'return current not answer question previous_level game' do
+        # задаваемые вопросы созданные на фабрике известны
+
+        # Метод previous_level возвращает число, равное предыдущему уровню сложности.
+         # Обратите внимание, что этот метод возвращает -1 для новой игры.
+        q = game_w_questions.current_game_question
+        expect(game_w_questions.current_game_question.text).to eq('В каком году была космичесая одиссея 155?')
+        # уровень на начало игры
+        expect(game_w_questions.previous_level).to eq(-1)
+        game_w_questions.answer_current_question!(q.correct_answer_key)
+        expect(game_w_questions.current_game_question.text).to eq('В каком году была космичесая одиссея 156?')
+        # с увеличением на 1 после каждого уровня
+        expect(game_w_questions.previous_level).to eq(0)
+        game_w_questions.answer_current_question!(q.correct_answer_key)
+        expect(game_w_questions.current_game_question.text).to eq('В каком году была космичесая одиссея 157?')
+        expect(game_w_questions.previous_level).to eq(1)
+      end
+    end
   end
 end
