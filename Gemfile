@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2.10'
 
+ruby '2.5.8'
+
 gem 'devise', '~> 4.1.1'
 gem 'devise-i18n'
 
