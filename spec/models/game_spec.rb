@@ -136,5 +136,44 @@ RSpec.describe Game, type: :model do
       game_w_questions.current_level = 8
       expect(game_w_questions.current_game_question.text).to eq('В каком году была космичесая одиссея 118?')
     end
+
+    context 'testing answer_current_question!' do
+      it 'answer is correct' do
+        # на начало игры текущий уровень равен 0
+        expect(game_w_questions.current_level).to eq(0)
+        # берем текущую игру и отвечаем на вопрос правильно
+        q = game_w_questions.current_game_question
+        game_w_questions.answer_current_question!(q.correct_answer_key)
+        # при правильном ответе текущий уровень игры увеличивается на 1
+        expect(game_w_questions.current_level).to eq(1)
+        # статус игры in_progress
+        expect(game_w_questions.status).to eq(:in_progress)
+      end
+
+      it 'answer is not correct' do
+        # на начало игры текущий уровень равен 0
+        expect(game_w_questions.current_level).to eq(0)
+        # берем текущую игру и отвечаем на вопрос не правильно
+        q = game_w_questions.current_game_question
+        game_w_questions.answer_current_question!('b')
+        # уровень игры остается прежним
+        expect(game_w_questions.current_level).to eq(0)
+        # статус игры fail
+        expect(game_w_questions.status).to eq(:fail)
+      end
+
+      it 'answer is correct on 15 question' do
+        # задем последний уровень игры
+        game_w_questions.current_level = 14
+        expect(game_w_questions.current_level).to eq(14)
+        # берем текущую игру и отвечаем на вопрос правильно
+        q = game_w_questions.current_game_question
+        game_w_questions.answer_current_question!(q.correct_answer_key)
+        # уровень увеличивется до 15
+        expect(game_w_questions.current_level).to eq(15)
+        # статус игры won
+        expect(game_w_questions.status).to eq(:won)
+      end
+    end
   end
 end
