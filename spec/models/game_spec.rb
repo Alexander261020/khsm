@@ -129,50 +129,58 @@ RSpec.describe Game, type: :model do
       expect(game_w_questions.previous_level).to eq(9)
     end
 
-    it 'current_game_question' do
-      expect(game_w_questions.current_game_question.text).to eq('В каком году была космичесая одиссея 110?')
-      game_w_questions.current_level = 5
-      expect(game_w_questions.current_game_question.text).to eq('В каком году была космичесая одиссея 115?')
-      game_w_questions.current_level = 8
-      expect(game_w_questions.current_game_question.text).to eq('В каком году была космичесая одиссея 118?')
+    describe 'current_game_question' do
+      it 'return correct level question' do
+        game_w_questions.current_level = 5
+        question = game_w_questions.current_game_question
+        expect(question.level).to eq(5)
+
+        game_w_questions.current_level = 12
+        question = game_w_questions.current_game_question
+        expect(question.level).to eq(12)
+      end
     end
 
-    context 'testing answer_current_question!' do
-      it 'answer is correct' do
-        # на начало игры текущий уровень равен 0
-        expect(game_w_questions.current_level).to eq(0)
-        # берем текущую игру и отвечаем на вопрос правильно
-        q = game_w_questions.current_game_question
-        game_w_questions.answer_current_question!(q.correct_answer_key)
-        # при правильном ответе текущий уровень игры увеличивается на 1
-        expect(game_w_questions.current_level).to eq(1)
-        # статус игры in_progress
-        expect(game_w_questions.status).to eq(:in_progress)
+    describe 'answer_current_question!' do
+      context 'when correct answer' do
+        it 'up level game' do
+          # на начало игры текущий уровень равен 0
+          expect(game_w_questions.current_level).to eq(0)
+          # берем текущую игру и отвечаем на вопрос правильно
+          q = game_w_questions.current_game_question
+          game_w_questions.answer_current_question!(q.correct_answer_key)
+          # при правильном ответе текущий уровень игры увеличивается на 1
+          expect(game_w_questions.current_level).to eq(1)
+          # статус игры in_progress
+          expect(game_w_questions.status).to eq(:in_progress)
+        end
+
+        it 'answer on 15 question, end game' do
+          # задем последний уровень игры
+          game_w_questions.current_level = 14
+          expect(game_w_questions.current_level).to eq(14)
+          # берем текущую игру и отвечаем на вопрос правильно
+          q = game_w_questions.current_game_question
+          game_w_questions.answer_current_question!(q.correct_answer_key)
+          # уровень увеличивется до 15
+          expect(game_w_questions.current_level).to eq(15)
+          # статус игры won
+          expect(game_w_questions.status).to eq(:won)
+        end
       end
 
-      it 'answer is not correct' do
-        # на начало игры текущий уровень равен 0
-        expect(game_w_questions.current_level).to eq(0)
-        # берем текущую игру и отвечаем на вопрос не правильно
-        q = game_w_questions.current_game_question
-        game_w_questions.answer_current_question!('b')
-        # уровень игры остается прежним
-        expect(game_w_questions.current_level).to eq(0)
-        # статус игры fail
-        expect(game_w_questions.status).to eq(:fail)
-      end
-
-      it 'answer is correct on 15 question' do
-        # задем последний уровень игры
-        game_w_questions.current_level = 14
-        expect(game_w_questions.current_level).to eq(14)
-        # берем текущую игру и отвечаем на вопрос правильно
-        q = game_w_questions.current_game_question
-        game_w_questions.answer_current_question!(q.correct_answer_key)
-        # уровень увеличивется до 15
-        expect(game_w_questions.current_level).to eq(15)
-        # статус игры won
-        expect(game_w_questions.status).to eq(:won)
+      context 'when the answer is not correct' do
+        it 'level not up, status game is fail' do
+          # на начало игры текущий уровень равен 0
+          expect(game_w_questions.current_level).to eq(0)
+          # берем текущую игру и отвечаем на вопрос не правильно
+          q = game_w_questions.current_game_question
+          game_w_questions.answer_current_question!('b')
+          # уровень игры остается прежним
+          expect(game_w_questions.current_level).to eq(0)
+          # статус игры fail
+          expect(game_w_questions.status).to eq(:fail)
+        end
       end
     end
   end
