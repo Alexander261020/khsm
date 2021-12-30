@@ -168,6 +168,7 @@ RSpec.describe GamesController, type: :controller do
       # Если игра закончилась, отправялем юзера на свой профиль
       expect(response).to redirect_to(user_path(user))
       expect(flash[:alert]).to be
+      # приз падает до несгораемой суммы
       expect(game.prize).to eq(1000)
     end
   end
