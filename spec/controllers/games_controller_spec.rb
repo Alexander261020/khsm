@@ -156,5 +156,19 @@ RSpec.describe GamesController, type: :controller do
       # Флеш пустой
       expect(flash.empty?).to be_truthy
     end
+
+    it 'answers uncorrect' do
+      # вручную поднимем уровень игры до 8
+      game_w_questions.update_attribute(:current_level, 8)
+      # Дёргаем экшен answer, передаем параметр params[:letter]
+      put :answer, id: game_w_questions.id, letter: 'c'
+      game = assigns(:game)
+      # Игра закончена
+      expect(game.finished?).to be_truthy
+      # Если игра закончилась, отправялем юзера на свой профиль
+      expect(response).to redirect_to(user_path(user))
+      expect(flash[:alert]).to be
+      expect(game.prize).to eq(1000)
+    end
   end
 end
