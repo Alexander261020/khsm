@@ -1,5 +1,6 @@
 #  (c) goodprogrammer.ru
 #
+require 'game_help_generator'
 # Игровой вопрос — модель, которая связывает игру и вопрос. При создании новой
 # игры формируется массив из 15 игровых вопросов для конкретной игры.
 class GameQuestion < ActiveRecord::Base
@@ -30,6 +31,7 @@ class GameQuestion < ActiveRecord::Base
   validates :a, :b, :c, :d, inclusion: {in: 1..4}
 
   serialize :help_hash, Hash
+  
   # {
   #   # При использовании подсказки остались варианты a и b
   #   fifty_fifty: ['a', 'b'],
@@ -51,14 +53,6 @@ class GameQuestion < ActiveRecord::Base
   #   'b' => 'Текст ответа У',
   #   ...
   # }
-  def variants
-    {
-      'a' => question.read_attribute("answer#{a}"),
-      'b' => question.read_attribute("answer#{b}"),
-      'c' => question.read_attribute("answer#{c}"),
-      'd' => question.read_attribute("answer#{d}")
-    }
-  end
 
   # Метод answer_correct? проверяет правильность ответа по букве. Возвращает
   # true, если переданная буква (строка или символ) содержит верный ответ и
@@ -77,5 +71,36 @@ class GameQuestion < ActiveRecord::Base
   # Метод correct_answer возвращает текст правильного ответа
   def correct_answer
     variants[correct_answer_key]
+  end
+
+  def variants
+    {
+      'a' => question.read_attribute("answer#{a}"),
+      'b' => question.read_attribute("answer#{b}"),
+      'c' => question.read_attribute("answer#{c}"),
+      'd' => question.read_attribute("answer#{d}")
+    }
+  end
+
+  # Генерируем в help_hash случайное распределение по вариантам и сохраняем объект
+  def add_audience_help
+    # Массив ключей
+    keys_to_use = keys_to_use_in_help
+
+    self.help_hash[:audience_help] =
+      GameHelpGenerator.audience_distribution(keys_to_use, correct_answer_key)
+
+    save
+  end
+
+  private
+
+  def keys_to_use_in_help
+    keys_to_use = variants.keys
+
+    # Учитываем наличие подсказки 50/50
+    keys_to_use = help_hash[:fifty_fifty] if help_hash.has_key?(:fifty_fifty)
+
+    keys_to_use
   end
 end
