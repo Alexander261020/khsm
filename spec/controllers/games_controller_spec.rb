@@ -19,6 +19,39 @@ RSpec.describe GamesController, type: :controller do
       expect(response.status).not_to eq(200)
       expect(flash[:alert]).to be
     end
+
+    # Аноним не может создать игру
+    it 'method create' do
+      # Вызываем экшен
+      post :create, id: game_w_questions.id
+      # статус ответа не равен 200
+      expect(response.status).not_to eq(200)
+      # отправляем на регисрацию
+      expect(response).to redirect_to(new_user_session_path)
+      expect(flash[:alert]).to be
+    end
+
+    # Аноним не может создать игру
+    it 'method answer' do
+      # Вызываем экшен
+      put :answer, id: game_w_questions.id
+      # статус ответа не равен 200
+      expect(response.status).not_to eq(200)
+      # отправляем на регисрацию
+      expect(response).to redirect_to(new_user_session_path)
+      expect(flash[:alert]).to be
+    end
+
+    # Аноним не может создать игру
+    it 'method take_money' do
+      # Вызываем экшен
+      put :take_money, id: game_w_questions.id
+      # статус ответа не равен 200
+      expect(response.status).not_to eq(200)
+      # отправляем на регисрацию
+      expect(response).to redirect_to(new_user_session_path)
+      expect(flash[:alert]).to be
+    end
   end
 
   context 'Usual user' do
