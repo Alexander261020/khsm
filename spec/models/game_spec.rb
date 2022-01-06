@@ -118,30 +118,34 @@ RSpec.describe Game, type: :model do
       end
     end
 
-    it 'return previous_level game' do
-      # на начало игры уровень 0 предыдущий уровень равень -1
-      expect(game_w_questions.previous_level).to eq(-1)
-      # задаем уровень 5
-      game_w_questions.current_level = 5
-      expect(game_w_questions.previous_level).to eq(4)
-      # задаем уровень 10
-      game_w_questions.current_level = 10
-      expect(game_w_questions.previous_level).to eq(9)
-    end
-
-    describe 'current_game_question' do
-      it 'return correct level question' do
+    describe '#previous_level' do
+      it 'return previous level game' do
+        # на начало игры уровень 0 предыдущий уровень равень -1
+        expect(game_w_questions.previous_level).to eq(-1)
+        # задаем уровень 5
         game_w_questions.current_level = 5
-        question = game_w_questions.current_game_question
-        expect(question.level).to eq(5)
-
-        game_w_questions.current_level = 12
-        question = game_w_questions.current_game_question
-        expect(question.level).to eq(12)
+        expect(game_w_questions.previous_level).to eq(4)
+        # задаем уровень 10
+        game_w_questions.current_level = 10
+        expect(game_w_questions.previous_level).to eq(9)
       end
     end
 
-    describe 'answer_current_question!' do
+    describe '#current_game_question' do
+      it 'return correct level question' do
+        game_w_questions.current_level = 5
+        question = game_w_questions.current_game_question
+        expect(game_w_questions.current_game_question).to eq(question)
+
+        # при изменении уровня игры вопрос меняется
+        game_w_questions.current_level = 12
+        expect(game_w_questions.current_game_question).not_to eq(question)
+      end
+
+      
+    end
+
+    describe '#answer_current_question!' do
       context 'when correct answer' do
         it 'up level game' do
           # на начало игры текущий уровень равен 0
