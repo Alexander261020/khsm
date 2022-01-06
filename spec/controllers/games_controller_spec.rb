@@ -164,19 +164,16 @@ RSpec.describe GamesController, type: :controller do
       expect(flash.empty?).to be_truthy
     end
 
-    it 'answers uncorrect' do
-      # вручную поднимем уровень игры до 8
-      game_w_questions.update_attribute(:current_level, 8)
+    it 'answer uncorrect' do
       # Дёргаем экшен answer, передаем параметр params[:letter]
       put :answer, id: game_w_questions.id, letter: 'c'
       game = assigns(:game)
       # Игра закончена
-      expect(game.finished?).to be_truthy
+      expect(game.finished?).to eq(true)
+      expect(game.status).to eq(:fail)
       # Если игра закончилась, отправялем юзера на свой профиль
       expect(response).to redirect_to(user_path(user))
       expect(flash[:alert]).to be
-      # приз падает до несгораемой суммы
-      expect(game.prize).to eq(1000)
     end
 
     it 'uses audience help' do
