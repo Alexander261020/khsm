@@ -80,17 +80,23 @@ RSpec.describe GameQuestion, type: :model do
   end
 
   # проверяем работу подсказки звонок другу
-  it 'correct #add_friend_call' do
+  describe '#add_friend_call' do
     # сначала убедимся, в подсказках пока нет нужного ключа
-    expect(game_question.help_hash).not_to include(:friend_call)
+    it 'Checking the absence of the required key' do
+      expect(game_question.help_hash).not_to include(:friend_call)
+    end
+
     # вызовем подсказку
-    game_question.add_friend_call
+    it 'Checking the availability of the required key' do
+      game_question.add_friend_call
+      expect(game_question.help_hash).to include(:friend_call)
+    end
 
-    # проверим создание подсказки
-    expect(game_question.help_hash).to include(:friend_call)
-    fc = game_question.help_hash[:friend_call]
-
-    # проверим что возвращаемое значение является строкой
-    expect(fc).to match(/\w+/)
+    it 'Check if the string matches a regular expression' do
+      game_question.add_friend_call
+      friend_call = game_question.help_hash[:friend_call]
+      # проверим что возвращаемое значение является заданной строкой с вариантом ответа
+      expect(friend_call).to match(/[а-я\s]+[считает, что это вариант]+[abcd]+/i)
+    end
   end
 end
