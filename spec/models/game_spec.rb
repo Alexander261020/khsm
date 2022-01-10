@@ -149,12 +149,19 @@ RSpec.describe Game, type: :model do
 
     describe '#answer_current_question!' do
       context 'when answer is wrong' do
-        let(:wrong_answer_key) { 'a' }
+        let(:answer_correct) { game_w_questions.current_game_question.correct_answer_key }
+        let(:wrong_answer_key) do
+          ['a', 'b', 'c', 'd'].reject { |n| n == answer_correct }.sample
+        end
 
         before { game_w_questions.answer_current_question!(wrong_answer_key) }
 
         it 'should finish game with status fail' do
           expect(game_w_questions.status).to eq(:fail)
+        end
+
+        it 'should return true' do
+          expect(game_w_questions.finished?).to eq(true)
         end
       end
 
@@ -166,20 +173,29 @@ RSpec.describe Game, type: :model do
         it 'should return game with status in_progress' do
           expect(game_w_questions.status).to eq(:in_progress)
         end
+
+        it 'should return false' do
+          expect(game_w_questions.finished?).to eq(false)
+        end
       end
 
       context 'and question is last' do
-        before {
+        before do
           game_w_questions.current_level = 14
           correct_answer_key = game_w_questions.current_game_question.correct_answer_key
-          game_w_questions.answer_current_question!(correct_answer_key) }
+          game_w_questions.answer_current_question!(correct_answer_key)
+        end
 
         it 'should assign final prize' do
-          expect(game_w_questions.prize).to eq(1000000)
+          expect(game_w_questions.prize).to eq(Game::PRIZES.last)
         end
 
         it 'should finish game with status won' do
           expect(game_w_questions.status).to eq(:won)
+        end
+
+        it 'should return true' do
+          expect(game_w_questions.finished?).to eq(true)
         end
       end
 
@@ -195,6 +211,10 @@ RSpec.describe Game, type: :model do
 
         it 'should continue game' do
           expect(game_w_questions.status).to eq(:in_progress)
+        end
+
+        it 'should return false' do
+          expect(game_w_questions.finished?).to eq(false)
         end
       end
 
