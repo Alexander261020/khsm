@@ -33,9 +33,7 @@ RSpec.describe GamesController, type: :controller do
       expect(response).to redirect_to(new_user_session_path)
       expect(flash[:alert]).to be
     end
-  end
 
-  context 'Anon cannot' do
     # Аноним не отвевать на вопросы
     it '#answer to question' do
       # Вызываем экшен
@@ -46,9 +44,7 @@ RSpec.describe GamesController, type: :controller do
       expect(response).to redirect_to(new_user_session_path)
       expect(flash[:alert]).to be
     end
-  end
 
-  context 'Anon cannot' do
     # Аноним не забрать деньги
     it '#take_money' do
       # Вызываем экшен
