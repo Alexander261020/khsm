@@ -10,7 +10,7 @@ RSpec.describe GamesController, type: :controller do
   let(:game_w_questions) { FactoryGirl.create(:game_with_questions, user: user) }
 
 
-  context 'Anon' do
+  context 'Anon cannot' do
     # Аноним не может смотреть игру
     it 'kicks from #show' do
       # Вызываем экшен
@@ -20,11 +20,9 @@ RSpec.describe GamesController, type: :controller do
       expect(response.status).not_to eq(200)
       expect(flash[:alert]).to be
     end
-  end
 
-  context 'Anon cannot' do
     # Аноним не может создать игру
-    it '#create game' do
+    it 'kicks from #create' do
       # Вызываем экшен
       post :create, id: game_w_questions.id
       # статус ответа не равен 200
@@ -35,7 +33,7 @@ RSpec.describe GamesController, type: :controller do
     end
 
     # Аноним не отвевать на вопросы
-    it '#answer to question' do
+    it 'kicks from #answer' do
       # Вызываем экшен
       put :answer, id: game_w_questions.id
       # статус ответа не равен 200
@@ -46,7 +44,7 @@ RSpec.describe GamesController, type: :controller do
     end
 
     # Аноним не забрать деньги
-    it '#take_money' do
+    it 'kicks from #take_money' do
       # Вызываем экшен
       put :take_money, id: game_w_questions.id
       # статус ответа не равен 200
