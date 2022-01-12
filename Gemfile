@@ -14,6 +14,13 @@ gem 'twitter-bootstrap-rails'
 gem 'font-awesome-rails'
 gem 'russian'
 
+group :test do
+  gem 'capybara'
+  # Этот гем позволяет сохранять и открывать скриншот страницы 
+  # с результатом активности юзера
+  gem 'launchy'
+end
+
 group :development, :test do
   gem 'sqlite3', '~> 1.3.13'
   gem 'byebug'
