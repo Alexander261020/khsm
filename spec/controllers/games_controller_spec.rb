@@ -187,5 +187,14 @@ RSpec.describe GamesController, type: :controller do
       expect(game.current_game_question.help_hash[:audience_help].keys).to contain_exactly('a', 'b', 'c', 'd')
       expect(response).to redirect_to(game_path(game))
     end
+
+    # user может воспользоваться подсказкой 50/50
+    it 'check #help for 50/50' do
+      put :help, id: game_w_questions.id, help_type: :fifty_fifty
+      game = assigns(:game)
+      expect(game.current_game_question.help_hash[:fifty_fifty]).to be
+      expect(game.current_game_question.help_hash[:fifty_fifty].size).to eq 2
+      expect(flash[:info]).to eq('Вы использовали подсказку')
+    end
   end
 end
