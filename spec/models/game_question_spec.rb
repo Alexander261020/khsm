@@ -96,7 +96,7 @@ RSpec.describe GameQuestion, type: :model do
       game_question.add_friend_call
       friend_call = game_question.help_hash[:friend_call]
       # проверим что возвращаемое значение является заданной строкой с вариантом ответа
-      expect(friend_call).to match(/[а-я\s]+[считает, что это вариант]+[abcd]+/i)
+      expect(friend_call).to end_with /[A-D]/
     end
   end
 end
