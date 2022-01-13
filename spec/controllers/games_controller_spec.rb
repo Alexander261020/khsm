@@ -194,7 +194,7 @@ RSpec.describe GamesController, type: :controller do
       game = assigns(:game)
       expect(game.current_game_question.help_hash[:fifty_fifty]).to be
       expect(game.current_game_question.help_hash[:fifty_fifty].size).to eq 2
-      expect(flash[:info]).to eq('Вы использовали подсказку')
+      expect(flash[:info]).to eq(I18n.t('controllers.games.help_used'))
     end
   end
 end
