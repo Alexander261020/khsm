@@ -162,7 +162,7 @@ RSpec.describe Game, type: :model do
       context 'when answer is wrong' do
         let(:answer_correct) { game_w_questions.current_game_question.correct_answer_key }
         let(:wrong_answer_key) do
-          %w(a b c d).reject { |n| n == answer_correct }.sample
+          %w[a b c d].reject { |n| n == answer_correct }.sample
         end
 
         before { game_w_questions.answer_current_question!(wrong_answer_key) }
@@ -171,7 +171,7 @@ RSpec.describe Game, type: :model do
           expect(game_w_questions.status).to eq :fail
         end
 
-        it 'should return true' do
+        it 'checking that the game is over' do
           expect(game_w_questions.finished?).to eq true
         end
       end
@@ -185,7 +185,7 @@ RSpec.describe Game, type: :model do
           expect(game_w_questions.status).to eq :in_progress
         end
 
-        it 'should return false' do
+        it 'checking that the game is still running' do
           expect(game_w_questions.finished?).to eq false
         end
       end
@@ -205,7 +205,7 @@ RSpec.describe Game, type: :model do
           expect(game_w_questions.status).to eq :won
         end
 
-        it 'should return true' do
+        it 'checking that the game is over' do
           expect(game_w_questions.finished?).to eq true
         end
       end
@@ -225,7 +225,7 @@ RSpec.describe Game, type: :model do
           expect(game_w_questions.status).to eq :in_progress
         end
 
-        it 'should return false' do
+        it 'checking that the game is still running' do
           expect(game_w_questions.finished?).to eq false
         end
       end
@@ -240,7 +240,7 @@ RSpec.describe Game, type: :model do
           expect(game_timeout.status).to eq :timeout
         end
 
-        it 'should return false' do
+        it 'checking that the game is still running' do
           expect(game_w_questions.finished?).to eq false
         end
       end
