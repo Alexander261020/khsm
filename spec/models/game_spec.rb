@@ -171,7 +171,7 @@ RSpec.describe Game, type: :model do
           expect(game_w_questions.status).to eq :fail
         end
 
-        it 'game is over' do
+        it 'Ends the game' do
           expect(game_w_questions.finished?).to eq true
         end
       end
@@ -185,7 +185,7 @@ RSpec.describe Game, type: :model do
           expect(game_w_questions.status).to eq :in_progress
         end
 
-        it 'game is still running' do
+        it 'Continues the game' do
           expect(game_w_questions.finished?).to eq false
         end
       end
@@ -205,7 +205,7 @@ RSpec.describe Game, type: :model do
           expect(game_w_questions.status).to eq :won
         end
 
-        it 'game is over' do
+        it 'Ends the game' do
           expect(game_w_questions.finished?).to eq true
         end
       end
@@ -225,7 +225,7 @@ RSpec.describe Game, type: :model do
           expect(game_w_questions.status).to eq :in_progress
         end
 
-        it 'game is still running' do
+        it 'Continues the game' do
           expect(game_w_questions.finished?).to eq false
         end
       end
@@ -240,7 +240,7 @@ RSpec.describe Game, type: :model do
           expect(game_timeout.status).to eq :timeout
         end
 
-        it 'game is still running' do
+        it 'Continues the game' do
           expect(game_w_questions.finished?).to eq false
         end
       end
